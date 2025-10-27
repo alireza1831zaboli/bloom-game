@@ -173,6 +173,13 @@ class WeaveWidget(QtWidgets.QWidget):
             self.update()
 
     def _update(self, dt: float):
+        ## HOTFIX_PARTICLES_GUARD
+        if not hasattr(self, "particles") or self.particles is None:
+            self.particles = []
+        ## PARTICLE_SPAWN: fading dots
+        if len(self.particles) > 300:
+            self.particles = self.particles[-300:]
+        self.particles.append((self.px, self.py, 1.0))
         w, h = self.width(), self.height()
         # فاز سختی (نرم و تدریجی)
         if self._mode == "endless":

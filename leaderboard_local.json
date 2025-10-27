@@ -36,17 +36,17 @@
   },
   {
     "name": "Player",
-    "score": 330,
-    "mode": "endless"
-  },
-  {
-    "name": "Player",
-    "score": 330,
-    "mode": "endless"
-  },
-  {
-    "name": "Player",
-    "score": 304,
+    "score": 342,
     "mode": "weave-endless"
+  },
+  {
+    "name": "Player",
+    "score": 330,
+    "mode": "endless"
+  },
+  {
+    "name": "Player",
+    "score": 330,
+    "mode": "endless"
   }
 ]
