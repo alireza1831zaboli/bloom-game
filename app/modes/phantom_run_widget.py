@@ -2,6 +2,7 @@
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
 from app.modes.base_mode import BaseModeWidget
+from app.utils import rect_intersects_circle
 from app.settings import (
     THEMES,
     RAMP_DURATION,

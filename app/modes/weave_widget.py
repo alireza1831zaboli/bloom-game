@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time, collections
+from app.modes.base_mode import BaseModeWidget
+from app.widgets.hud import HudPainter
 from app.settings import (
     THEMES,
     INITIAL_TIME_ENDLESS,
@@ -8,7 +10,6 @@ from app.settings import (
     RAMP_RATE,
     MAX_PHASE,
 )
-from app.modes.base_mode import BaseModeWidget
 
 NODE_R = 10
 TARGET_R = 11
@@ -268,7 +269,9 @@ class WeaveWidget(BaseModeWidget):
         for t in self.targets:
             t["t"] += dt
             if not t["lit"]:
-                if (self.px - t["x"]) ** 2 + (self.py - t["y"]) ** 2 < (TARGET_R + 4) ** 2:
+                if (self.px - t["x"]) ** 2 + (self.py - t["y"]) ** 2 < (
+                    TARGET_R + 4
+                ) ** 2:
                     t["lit"] = True
                     self.score += 12
                     self.scoreChanged.emit(self.score)
@@ -425,7 +428,9 @@ class WeaveWidget(BaseModeWidget):
         for tgd in self.targets:
             pul = 1 + math.sin(tgd["t"] * 6) * 0.18
             clr = (
-                QtGui.QColor(120, 220, 255, 220) if tgd["lit"] else QtGui.QColor(200, 210, 255, 160)
+                QtGui.QColor(120, 220, 255, 220)
+                if tgd["lit"]
+                else QtGui.QColor(200, 210, 255, 160)
             )
             glow = QtGui.QColor(clr)
             glow.setAlpha(80)
@@ -436,7 +441,9 @@ class WeaveWidget(BaseModeWidget):
                 TARGET_R * pul + 5,
             )
             p.setBrush(clr)
-            p.drawEllipse(QtCore.QPointF(tgd["x"], tgd["y"]), TARGET_R * pul, TARGET_R * pul)
+            p.drawEllipse(
+                QtCore.QPointF(tgd["x"], tgd["y"]), TARGET_R * pul, TARGET_R * pul
+            )
 
         # گلیچ‌ها
         for g in self.glitches:
@@ -449,8 +456,14 @@ class WeaveWidget(BaseModeWidget):
             p.drawEllipse(QtCore.QPointF(g["x"], g["y"]), 10, 10)
 
         # بازیکن
-        sp = math.hypot(self.vx, self.vy) if self._control == "mouse" else self.forward_speed
-        direction = math.atan2(self.vy, self.vx) if self._control == "mouse" else self.heading
+        sp = (
+            math.hypot(self.vx, self.vy)
+            if self._control == "mouse"
+            else self.forward_speed
+        )
+        direction = (
+            math.atan2(self.vy, self.vx) if self._control == "mouse" else self.heading
+        )
         trail = min(sp * 0.04, 12)
         p.save()
         p.translate(self.px, self.py)
@@ -459,7 +472,9 @@ class WeaveWidget(BaseModeWidget):
         glowA.setAlpha(100)
         p.setBrush(glowA)
         p.setPen(QtCore.Qt.NoPen)
-        p.drawEllipse(QtCore.QPointF(0, 0), PLAYER_R + trail * 0.6, PLAYER_R + trail * 0.6)
+        p.drawEllipse(
+            QtCore.QPointF(0, 0), PLAYER_R + trail * 0.6, PLAYER_R + trail * 0.6
+        )
         grad2 = QtGui.QLinearGradient(-trail, -PLAYER_R, PLAYER_R, PLAYER_R)
         grad2.setColorAt(0, QtGui.QColor(self._theme.playerA))
         grad2.setColorAt(1, QtGui.QColor(self._theme.playerB))
@@ -472,8 +487,7 @@ class WeaveWidget(BaseModeWidget):
         p.drawPath(path)
         p.restore()
 
-        # HUD ساده
-        p.setPen(QtGui.QPen(QtGui.QColor(255, 255, 255, 150)))
-        p.setFont(QtGui.QFont("Inter", 10, QtGui.QFont.Bold))
+        # HUD ساده (بدون تغییر ظاهر)
         mode = "Endless" if self._mode == "endless" else "Story"
-        p.drawText(10, h - 12, f"Flux Weave — {mode}")
+        HudPainter.draw_footer_title(p, f"Flux Weave — {mode}", w, h)
+        
