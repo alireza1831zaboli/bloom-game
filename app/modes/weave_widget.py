@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time, collections
-from app.modes.base_mode import BaseModeWidget
 from app.settings import (
     THEMES,
     INITIAL_TIME_ENDLESS,
@@ -14,11 +13,12 @@ NODE_R = 10
 TARGET_R = 11
 GLITCH_R2 = 24 * 24
 SELF_COLLIDE_R2 = 12 * 12
-TRAIL_MAX = 420  # تعداد نقاط رد نور
+TRAIL_MAX = 420  # compat
+TRAIL_MAX_LEN = 1200.0  # pixels  # تعداد نقاط رد نور
 PLAYER_R = 10
 
 
-class WeaveWidget(BaseModeWidget):
+class WeaveWidget(QtWidgets.QWidget):
     # هم‌نام با GameWidget تا نوار ابزار و برچسب‌ها کار کنند
     scoreChanged = QtCore.Signal(int)
     timeChanged = QtCore.Signal(int)
@@ -42,6 +42,8 @@ class WeaveWidget(BaseModeWidget):
 
         # بازیکن
         self.px = self.width() / 2.0
+        self._mx = self.px
+        self._my = self.height() / 2.0
         self.py = self.height() / 2.0
         self.mx = self.px
         self.my = self.py
@@ -391,6 +393,27 @@ class WeaveWidget(BaseModeWidget):
             )
 
     # ---------- رسم
+
+    def _prune_trail_by_length(self):
+        import math
+
+        pts = self.trail
+        if not pts or len(pts) < 2:
+            return
+        total = 0.0
+        keep = [pts[-1]]
+        for i in range(len(pts) - 2, -1, -1):
+            x1, y1 = pts[i]
+            x2, y2 = keep[-1]
+            dx, dy = x2 - x1, y2 - y1
+            seg = math.hypot(dx, dy)
+            if total + seg > TRAIL_MAX_LEN and len(keep) > 1:
+                break
+            keep.append((x1, y1))
+            total += seg
+        keep.reverse()
+        self.trail = keep
+
     def paintEvent(self, e: QtGui.QPaintEvent):
         p = QtGui.QPainter(self)
         p.setRenderHint(QtGui.QPainter.Antialiasing)

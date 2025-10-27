@@ -2,7 +2,6 @@ from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
 
 # هماهنگ با بازی‌های دیگر:
-from app.modes.base_mode import BaseModeWidget
 from app.settings import THEMES, MAX_PHASE, RAMP_DURATION, RAMP_RATE
 
 PLAYER_R = 11
@@ -10,7 +9,7 @@ NODE_R2 = 22 * 22
 GLITCH_R2 = 18 * 18
 
 
-class SignalRushWidget(BaseModeWidget):
+class SignalRushWidget(QtWidgets.QWidget):
     scoreChanged = QtCore.Signal(int)
     timeChanged = QtCore.Signal(int)  # در Endless بی‌استفاده (∞)
     bestChanged = QtCore.Signal(int)

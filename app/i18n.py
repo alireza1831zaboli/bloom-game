@@ -31,8 +31,6 @@ STRINGS = {
     "menu.quit": {"fa": "خروج", "en": "Quit"},
     # تنظیمات
     "settings.title": {"fa": "تنظیمات", "en": "Settings"},
-    "settings.sens": {"fa": "حساسیت ماوس", "en": "Mouse sensitivity"},
-    "settings.diff": {"fa": "درجه سختی", "en": "Difficulty"},
     "settings.prefs": {"fa": "ترجیحات", "en": "Preferences"},
     "settings.control": {"fa": "حالت کنترل:", "en": "Control:"},
     "settings.sfx": {"fa": "صداها:", "en": "SFX:"},

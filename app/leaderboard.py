@@ -1,10 +1,8 @@
 import json, os, threading, requests
 from .settings import LOCAL_LB_PATH, API_URL
-from typing import List, Dict, Any
 
 
 class LocalLeaderboard:
-    """Local JSON-backed leaderboard (no behavior change)."""
     def __init__(self, path: str = LOCAL_LB_PATH):
         self.path = path
         if not os.path.exists(self.path):
@@ -29,7 +27,6 @@ class LocalLeaderboard:
 
 
 class OnlineLeaderboard:
-    """Thin wrapper around optional HTTP API for leaderboard submissions."""
     def submit(self, name, score, mode):
         if not API_URL:
             return

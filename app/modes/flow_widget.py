@@ -2,7 +2,6 @@
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
 
-from app.modes.base_mode import BaseModeWidget
 from app.settings import (
     THEMES,
     INITIAL_TIME_ENDLESS,
@@ -30,7 +29,7 @@ def flow_vec(x: float, y: float, t: float) -> tuple[float, float]:
     return fx, fy
 
 
-class FlowWidget(BaseModeWidget):
+class FlowWidget(QtWidgets.QWidget):
     # سیگنال‌ها سازگار با بقیهٔ مودها
     scoreChanged = QtCore.Signal(int)
     timeChanged = QtCore.Signal(int)

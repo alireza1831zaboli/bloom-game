@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
-from app.modes.base_mode import BaseModeWidget
 from app.settings import (
     THEMES,
     RAMP_DURATION,
@@ -21,7 +20,7 @@ def rect_intersects_circle(rx, ry, rw, rh, cx, cy, r):
     return (dx * dx + dy * dy) <= (r * r)
 
 
-class PhantomRunWidget(BaseModeWidget):
+class PhantomRunWidget(QtWidgets.QWidget):
     scoreChanged = QtCore.Signal(int)
     timeChanged = QtCore.Signal(int)
     bestChanged = QtCore.Signal(int)

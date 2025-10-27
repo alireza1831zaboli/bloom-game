@@ -1,6 +1,5 @@
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
-from app.modes.base_mode import BaseModeWidget
 from app.settings import (
     THEMES,
     RAMP_DURATION,
@@ -24,7 +23,7 @@ HIT_R2 = 22 * 22  # collision radius^2 vs glitches
 PICK_R2 = 26 * 26  # pick distance^2 for stabilizers
 
 
-class NeuralCollapseWidget(BaseModeWidget):
+class NeuralCollapseWidget(QtWidgets.QWidget):
     # unified signals (compatible with your MainWindow toolbars)
     scoreChanged = QtCore.Signal(int)
     timeChanged = QtCore.Signal(int)  # <= only for Story

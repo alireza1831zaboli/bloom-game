@@ -56,6 +56,8 @@ class GameWidget(QtWidgets.QWidget):
         # keyboard control state
         self.heading = 0.0  # radians
         self.turn_speed = math.radians(180)  # rad/s (قابل تغییر)
+        self._mouse_sens = 1.0
+        self._difficulty = 'Normal'
         self.forward_speed = 240.0  # px/s ثابت در حالت keys
         self.key_left = False
         self.key_right = False
@@ -835,13 +837,3 @@ class GameWidget(QtWidgets.QWidget):
     def showEvent(self, e: QtGui.QShowEvent):
         super().showEvent(e)
         self.setFocus(QtCore.Qt.ActiveWindowFocusReason)
-
-
-    def set_mouse_sensitivity(self, value: float):
-        try:
-            self._mouse_sens = max(0.5, min(2.0, float(value)))
-        except Exception:
-            self._mouse_sens = 1.0
-
-    def set_difficulty(self, preset: str):
-        self._difficulty = preset  # used to choose ramp presets if needed

@@ -1,6 +1,4 @@
-"""Main window and navigation for Neural Bloom (refactor-safe docstring)."""
 from PySide6 import QtWidgets, QtGui, QtCore
-from typing import Optional, Callable, Any
 from .game_widget import GameWidget
 from .leaderboard import LocalLeaderboard, OnlineLeaderboard
 
@@ -13,8 +11,6 @@ from .views.games.mirror_menu import MirrorMenu
 from .views.games.collapse_menu import CollapseMenu
 from .views.settings_page import SettingsPage
 from .views.about_page import AboutPage
-from .views.dialogs.level_select import LevelSelectDialog
-from .views.widgets.countdown import CountdownOverlay
 from .modes.weave_widget import WeaveWidget
 from .modes.mirror_widget import MirrorWidget
 from .modes.phantom_run_widget import PhantomRunWidget
@@ -39,6 +35,26 @@ from .settings import (
 )
 
 
+class LevelSelectDialog(QtWidgets.QDialog):
+    def __init__(self, unlocked: int, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("انتخاب مرحله")
+        self.resize(520, 540)
+        v = QtWidgets.QVBoxLayout(self)
+        self.list = QtWidgets.QListWidget(self)
+        for lvl in STORY_LEVELS[:unlocked]:
+            self.list.addItem(f"{lvl['id']:02d} — {lvl['title']}  |  {lvl['desc']}")
+        v.addWidget(self.list)
+        btns = QtWidgets.QDialogButtonBox(
+            QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
+        )
+        btns.accepted.connect(self.accept)
+        btns.rejected.connect(self.reject)
+        v.addWidget(btns)
+
+    def selected_index(self):
+        row = self.list.currentRow()
+        return row if row >= 0 else None
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -200,17 +216,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # ------------------------------------------------------------------
     # UI pieces
-
-        # final guard: ensure countdown exists
-        self._ensure_countdown_created()
-
-        # HUD shadow for readability
-        try:
-            self._apply_shadow_effect(self.lbl_score)
-            self._apply_shadow_effect(self.lbl_time)
-            self._apply_shadow_effect(self.lbl_best)
-        except Exception:
-            pass
     def _build_game_toolbar(self):
         w = QtWidgets.QWidget()
         h = QtWidgets.QHBoxLayout(w)
@@ -287,8 +292,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 "music": False,
                 "sfx": True,
                 "theme": "Aurora",
-                "sensitivity": 1.0,
-                "difficulty": "Normal",
             }
 
     def _save_settings(self):
@@ -305,8 +308,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.game.set_music(self.settings["music"])
         self.game.set_sfx(self.settings["sfx"])
         self.game.set_theme(self.settings["theme"])
-        self.game.set_mouse_sensitivity(self.settings.get("sensitivity", 1.0))
-        self.game.set_difficulty(self.settings.get("difficulty", "Normal"))
 
         # language switch
         if data.get("lang") and data["lang"] != self._lang:
@@ -443,7 +444,7 @@ class MainWindow(QtWidgets.QMainWindow):
         msg.exec()
         # در هر دو متد:
         if msg.clickedButton() == start:
-            self._start_with_countdown(self.active_game)
+            self.active_game.start()
             QtCore.QTimer.singleShot(
                 0, lambda: self.active_game.setFocus(QtCore.Qt.ActiveWindowFocusReason)
             )
@@ -472,7 +473,7 @@ class MainWindow(QtWidgets.QMainWindow):
         msg.exec()
         # در هر دو متد:
         if msg.clickedButton() == start:
-            self._start_with_countdown(self.active_game)
+            self.active_game.start()
             QtCore.QTimer.singleShot(
                 0, lambda: self.active_game.setFocus(QtCore.Qt.ActiveWindowFocusReason)
             )
@@ -525,7 +526,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 except TypeError:
                     G.prepare_story(0)
                 self.stack.setCurrentIndex(1)
-                self._start_with_countdown(G)
+                G.start()
                 QtCore.QTimer.singleShot(
                     0, lambda: G.setFocus(QtCore.Qt.ActiveWindowFocusReason)
                 )
@@ -535,7 +536,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 except TypeError:
                     G.prepare_story(0)
                 self.stack.setCurrentIndex(1)
-                self._start_with_countdown(G)
+                G.start()
                 QtCore.QTimer.singleShot(
                     0, lambda: G.setFocus(QtCore.Qt.ActiveWindowFocusReason)
                 )
@@ -560,7 +561,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 G.set_mode("endless")
                 G.prepare_endless()
                 self.stack.setCurrentIndex(1)
-                self._start_with_countdown(G)  # ← مستقیم شروع
+                G.start()  # ← مستقیم شروع
                 QtCore.QTimer.singleShot(
                     0, lambda: G.setFocus(QtCore.Qt.ActiveWindowFocusReason)
                 )
@@ -707,8 +708,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.active_game.set_music(self.settings.get("music", False))
         self.active_game.set_sfx(self.settings.get("sfx", True))
         self.active_game.set_theme(self.settings.get("theme", "Aurora"))
-        self.active_game.set_mouse_sensitivity(self.settings.get("sensitivity", 1.0))
-        self.active_game.set_difficulty(self.settings.get("difficulty", "Normal"))
 
         # فوکوس روی خود بازی
         QtCore.QTimer.singleShot(
@@ -729,64 +728,3 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.active_game.runEnded.disconnect()
         except Exception:
             pass
-
-    def _start_with_countdown(self, game_obj):
-        def do_start():
-            try:
-                game_obj.start()
-            except Exception:
-                pass
-        try:
-            self._countdown.finished.disconnect()
-        except Exception:
-            pass
-        self._countdown.finished.connect(do_start)
-        self._countdown.start()
-        # lazy init and resize guard
-        if not hasattr(self, "_countdown") or self._countdown is None:
-            try:
-                self._countdown = CountdownOverlay(parent=self.game_host)
-            except Exception:
-                try:
-                    game_obj.start()
-                except Exception:
-                    pass
-                return
-        self._countdown.resize(self.game_host.size())
-        # strengthen: ensure overlay exists and sized
-        self._ensure_countdown_created()
-        if not getattr(self, "_countdown", None):
-            try:
-                game_obj.start()
-            except Exception:
-                pass
-            return
-        try:
-            self._countdown.resize(getattr(self, "game_host", self).size())
-        except Exception:
-            pass
-
-
-    def resizeEvent(self, ev):
-        try:
-            if hasattr(self, "_countdown") and self._countdown and self._countdown.isVisible():
-                self._countdown.resize(self.game_host.size())
-        except Exception:
-            pass
-        return super().resizeEvent(ev)
-
-    def _ensure_countdown_created(self):
-        if not hasattr(self, "_countdown") or self._countdown is None:
-            try:
-                parent = getattr(self, "game_host", self)
-                self._countdown = CountdownOverlay(parent=parent)
-            except Exception:
-                self._countdown = None
-
-
-    def _apply_shadow_effect(self, label: QtWidgets.QLabel):
-        eff = QtWidgets.QGraphicsDropShadowEffect(self)
-        eff.setBlurRadius(8.0)
-        eff.setOffset(0, 1)
-        eff.setColor(QtGui.QColor(0, 0, 0, 180))
-        label.setGraphicsEffect(eff)

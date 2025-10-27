@@ -16,6 +16,11 @@
   },
   {
     "name": "Player",
+    "score": 595,
+    "mode": "endless"
+  },
+  {
+    "name": "Player",
     "score": 581,
     "mode": "phantom-endless"
   },
@@ -42,11 +47,6 @@
   {
     "name": "Player",
     "score": 304,
-    "mode": "weave-endless"
-  },
-  {
-    "name": "Player",
-    "score": 244,
     "mode": "weave-endless"
   }
 ]

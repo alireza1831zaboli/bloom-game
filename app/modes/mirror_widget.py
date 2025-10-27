@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
-from app.modes.base_mode import BaseModeWidget
 from app.settings import THEMES, INITIAL_TIME_ENDLESS, RAMP_DURATION, RAMP_RATE, MAX_PHASE
 
 PLAYER_R   = 10
 ORB_R2     = 14 * 14
 GLITCH_R2  = 22 * 22
 
-class MirrorWidget(BaseModeWidget):
+class MirrorWidget(QtWidgets.QWidget):
     # سازگار با بقیهٔ مودها
     scoreChanged = QtCore.Signal(int)
     timeChanged  = QtCore.Signal(int)
