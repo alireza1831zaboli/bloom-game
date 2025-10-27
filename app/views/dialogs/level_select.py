@@ -22,3 +22,4 @@ class LevelSelectDialog(QtWidgets.QDialog):
     def selected_index(self):
         row = self.list.currentRow()
         return row if row >= 0 else None
+

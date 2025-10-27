@@ -3,14 +3,17 @@ from app.main_window import MainWindow
 from app.utils import resource_path
 import sys, os
 
+
 def load_qss(app):
     qss_path = resource_path("app/ui_style.qss")
     if os.path.exists(qss_path):
         with open(qss_path, "r", encoding="utf-8") as f:
             app.setStyleSheet(f.read())
 
+
 def load_fonts():
     from PySide6.QtGui import QFontDatabase
+
     fonts = [
         "app/assets/fonts/Vazirmatn-Regular.ttf",
         "app/assets/fonts/Vazirmatn-Bold.ttf",
@@ -21,6 +24,7 @@ def load_fonts():
         path = resource_path(rel)
         if os.path.exists(path):
             QFontDatabase.addApplicationFont(path)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
@@ -39,8 +43,8 @@ if __name__ == "__main__":
     load_qss(app)
 
     # DPI آگاه (تا شفاف و واضح باشد)
-    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
-
+    # AA_UseHighDpiPixmaps is deprecated in Qt6; default behavior is already HiDPI-aware.
+    # QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     win = MainWindow()
     win.show()
     sys.exit(app.exec())

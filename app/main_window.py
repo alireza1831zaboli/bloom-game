@@ -14,6 +14,7 @@ from .views.games.collapse_menu import CollapseMenu
 from .views.settings_page import SettingsPage
 from .views.about_page import AboutPage
 from .views.dialogs.level_select import LevelSelectDialog
+from .views.widgets.countdown import CountdownOverlay
 from .modes.weave_widget import WeaveWidget
 from .modes.mirror_widget import MirrorWidget
 from .modes.phantom_run_widget import PhantomRunWidget
@@ -199,6 +200,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # ------------------------------------------------------------------
     # UI pieces
+
+        # final guard: ensure countdown exists
+        self._ensure_countdown_created()
     def _build_game_toolbar(self):
         w = QtWidgets.QWidget()
         h = QtWidgets.QHBoxLayout(w)
@@ -427,7 +431,7 @@ class MainWindow(QtWidgets.QMainWindow):
         msg.exec()
         # در هر دو متد:
         if msg.clickedButton() == start:
-            self.active_game.start()
+            self._start_with_countdown(self.active_game)
             QtCore.QTimer.singleShot(
                 0, lambda: self.active_game.setFocus(QtCore.Qt.ActiveWindowFocusReason)
             )
@@ -456,7 +460,7 @@ class MainWindow(QtWidgets.QMainWindow):
         msg.exec()
         # در هر دو متد:
         if msg.clickedButton() == start:
-            self.active_game.start()
+            self._start_with_countdown(self.active_game)
             QtCore.QTimer.singleShot(
                 0, lambda: self.active_game.setFocus(QtCore.Qt.ActiveWindowFocusReason)
             )
@@ -509,7 +513,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 except TypeError:
                     G.prepare_story(0)
                 self.stack.setCurrentIndex(1)
-                G.start()
+                self._start_with_countdown(G)
                 QtCore.QTimer.singleShot(
                     0, lambda: G.setFocus(QtCore.Qt.ActiveWindowFocusReason)
                 )
@@ -519,7 +523,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 except TypeError:
                     G.prepare_story(0)
                 self.stack.setCurrentIndex(1)
-                G.start()
+                self._start_with_countdown(G)
                 QtCore.QTimer.singleShot(
                     0, lambda: G.setFocus(QtCore.Qt.ActiveWindowFocusReason)
                 )
@@ -544,7 +548,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 G.set_mode("endless")
                 G.prepare_endless()
                 self.stack.setCurrentIndex(1)
-                G.start()  # ← مستقیم شروع
+                self._start_with_countdown(G)  # ← مستقیم شروع
                 QtCore.QTimer.singleShot(
                     0, lambda: G.setFocus(QtCore.Qt.ActiveWindowFocusReason)
                 )
@@ -711,3 +715,56 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.active_game.runEnded.disconnect()
         except Exception:
             pass
+
+    def _start_with_countdown(self, game_obj):
+        def do_start():
+            try:
+                game_obj.start()
+            except Exception:
+                pass
+        try:
+            self._countdown.finished.disconnect()
+        except Exception:
+            pass
+        self._countdown.finished.connect(do_start)
+        self._countdown.start()
+        # lazy init and resize guard
+        if not hasattr(self, "_countdown") or self._countdown is None:
+            try:
+                self._countdown = CountdownOverlay(parent=self.game_host)
+            except Exception:
+                try:
+                    game_obj.start()
+                except Exception:
+                    pass
+                return
+        self._countdown.resize(self.game_host.size())
+        # strengthen: ensure overlay exists and sized
+        self._ensure_countdown_created()
+        if not getattr(self, "_countdown", None):
+            try:
+                game_obj.start()
+            except Exception:
+                pass
+            return
+        try:
+            self._countdown.resize(getattr(self, "game_host", self).size())
+        except Exception:
+            pass
+
+
+    def resizeEvent(self, ev):
+        try:
+            if hasattr(self, "_countdown") and self._countdown and self._countdown.isVisible():
+                self._countdown.resize(self.game_host.size())
+        except Exception:
+            pass
+        return super().resizeEvent(ev)
+
+    def _ensure_countdown_created(self):
+        if not hasattr(self, "_countdown") or self._countdown is None:
+            try:
+                parent = getattr(self, "game_host", self)
+                self._countdown = CountdownOverlay(parent=parent)
+            except Exception:
+                self._countdown = None
