@@ -2,7 +2,6 @@
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time, collections
 from app.modes.base_mode import BaseModeWidget
-from app.widgets.hud import HudPainter
 from app.settings import (
     THEMES,
     INITIAL_TIME_ENDLESS,
@@ -487,7 +486,8 @@ class WeaveWidget(BaseModeWidget):
         p.drawPath(path)
         p.restore()
 
-        # HUD ساده (بدون تغییر ظاهر)
+        # HUD ساده
+        p.setPen(QtGui.QPen(QtGui.QColor(255, 255, 255, 150)))
+        p.setFont(QtGui.QFont("Inter", 10, QtGui.QFont.Bold))
         mode = "Endless" if self._mode == "endless" else "Story"
-        HudPainter.draw_footer_title(p, f"Flux Weave — {mode}", w, h)
-        
+        p.drawText(10, h - 12, f"Flux Weave — {mode}")

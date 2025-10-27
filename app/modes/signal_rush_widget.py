@@ -1,8 +1,8 @@
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
-from app.modes.base_mode import BaseModeWidget
 
 # هماهنگ با بازی‌های دیگر:
+from app.modes.base_mode import BaseModeWidget
 from app.settings import THEMES, MAX_PHASE, RAMP_DURATION, RAMP_RATE
 
 PLAYER_R = 11

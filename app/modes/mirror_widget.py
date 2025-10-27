@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
-from app.settings import THEMES, INITIAL_TIME_ENDLESS, RAMP_DURATION, RAMP_RATE, MAX_PHASE
 from app.modes.base_mode import BaseModeWidget
+from app.settings import THEMES, INITIAL_TIME_ENDLESS, RAMP_DURATION, RAMP_RATE, MAX_PHASE
 
 PLAYER_R   = 10
 ORB_R2     = 14 * 14

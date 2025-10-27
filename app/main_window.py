@@ -1,4 +1,6 @@
+"""Main window and navigation for Neural Bloom (refactor-safe docstring)."""
 from PySide6 import QtWidgets, QtGui, QtCore
+from typing import Optional, Callable, Any
 from .game_widget import GameWidget
 from .leaderboard import LocalLeaderboard, OnlineLeaderboard
 
@@ -11,6 +13,7 @@ from .views.games.mirror_menu import MirrorMenu
 from .views.games.collapse_menu import CollapseMenu
 from .views.settings_page import SettingsPage
 from .views.about_page import AboutPage
+from .views.dialogs.level_select import LevelSelectDialog
 from .modes.weave_widget import WeaveWidget
 from .modes.mirror_widget import MirrorWidget
 from .modes.phantom_run_widget import PhantomRunWidget
@@ -35,26 +38,6 @@ from .settings import (
 )
 
 
-class LevelSelectDialog(QtWidgets.QDialog):
-    def __init__(self, unlocked: int, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("انتخاب مرحله")
-        self.resize(520, 540)
-        v = QtWidgets.QVBoxLayout(self)
-        self.list = QtWidgets.QListWidget(self)
-        for lvl in STORY_LEVELS[:unlocked]:
-            self.list.addItem(f"{lvl['id']:02d} — {lvl['title']}  |  {lvl['desc']}")
-        v.addWidget(self.list)
-        btns = QtWidgets.QDialogButtonBox(
-            QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel
-        )
-        btns.accepted.connect(self.accept)
-        btns.rejected.connect(self.reject)
-        v.addWidget(btns)
-
-    def selected_index(self):
-        row = self.list.currentRow()
-        return row if row >= 0 else None
 
 
 class MainWindow(QtWidgets.QMainWindow):

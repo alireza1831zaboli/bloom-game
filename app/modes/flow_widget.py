@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from PySide6 import QtWidgets, QtGui, QtCore
 import math, random, time
-from app.modes.base_mode import BaseModeWidget
 
+from app.modes.base_mode import BaseModeWidget
 from app.settings import (
     THEMES,
     INITIAL_TIME_ENDLESS,
