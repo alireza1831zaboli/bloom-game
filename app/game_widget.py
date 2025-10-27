@@ -835,3 +835,13 @@ class GameWidget(QtWidgets.QWidget):
     def showEvent(self, e: QtGui.QShowEvent):
         super().showEvent(e)
         self.setFocus(QtCore.Qt.ActiveWindowFocusReason)
+
+
+    def set_mouse_sensitivity(self, value: float):
+        try:
+            self._mouse_sens = max(0.5, min(2.0, float(value)))
+        except Exception:
+            self._mouse_sens = 1.0
+
+    def set_difficulty(self, preset: str):
+        self._difficulty = preset  # used to choose ramp presets if needed

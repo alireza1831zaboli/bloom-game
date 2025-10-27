@@ -41,12 +41,12 @@
   },
   {
     "name": "Player",
-    "score": 324,
-    "mode": "phantom-endless"
+    "score": 304,
+    "mode": "weave-endless"
   },
   {
     "name": "Player",
-    "score": 304,
+    "score": 244,
     "mode": "weave-endless"
   }
 ]

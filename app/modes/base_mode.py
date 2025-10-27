@@ -36,3 +36,13 @@ class BaseModeWidget(QtWidgets.QWidget):
             pass
         self._timer.timeout.connect(_tick)
         self._timer.start(16)
+
+
+    # --- Optional hooks; modes may override if they use them ---
+    def set_mouse_sensitivity(self, value: float):
+        """0.5..2.0 typical. Default: no-op for modes that don't use it."""
+        self._mouse_sens = value  # store for reference
+
+    def set_difficulty(self, preset: str):
+        """'Chill'|'Normal'|'Hard' typical. Default: no-op."""
+        self._difficulty = preset

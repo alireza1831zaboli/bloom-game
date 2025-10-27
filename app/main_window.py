@@ -203,6 +203,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # final guard: ensure countdown exists
         self._ensure_countdown_created()
+
+        # HUD shadow for readability
+        try:
+            self._apply_shadow_effect(self.lbl_score)
+            self._apply_shadow_effect(self.lbl_time)
+            self._apply_shadow_effect(self.lbl_best)
+        except Exception:
+            pass
     def _build_game_toolbar(self):
         w = QtWidgets.QWidget()
         h = QtWidgets.QHBoxLayout(w)
@@ -279,6 +287,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 "music": False,
                 "sfx": True,
                 "theme": "Aurora",
+                "sensitivity": 1.0,
+                "difficulty": "Normal",
             }
 
     def _save_settings(self):
@@ -295,6 +305,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.game.set_music(self.settings["music"])
         self.game.set_sfx(self.settings["sfx"])
         self.game.set_theme(self.settings["theme"])
+        self.game.set_mouse_sensitivity(self.settings.get("sensitivity", 1.0))
+        self.game.set_difficulty(self.settings.get("difficulty", "Normal"))
 
         # language switch
         if data.get("lang") and data["lang"] != self._lang:
@@ -695,6 +707,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.active_game.set_music(self.settings.get("music", False))
         self.active_game.set_sfx(self.settings.get("sfx", True))
         self.active_game.set_theme(self.settings.get("theme", "Aurora"))
+        self.active_game.set_mouse_sensitivity(self.settings.get("sensitivity", 1.0))
+        self.active_game.set_difficulty(self.settings.get("difficulty", "Normal"))
 
         # فوکوس روی خود بازی
         QtCore.QTimer.singleShot(
@@ -768,3 +782,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 self._countdown = CountdownOverlay(parent=parent)
             except Exception:
                 self._countdown = None
+
+
+    def _apply_shadow_effect(self, label: QtWidgets.QLabel):
+        eff = QtWidgets.QGraphicsDropShadowEffect(self)
+        eff.setBlurRadius(8.0)
+        eff.setOffset(0, 1)
+        eff.setColor(QtGui.QColor(0, 0, 0, 180))
+        label.setGraphicsEffect(eff)

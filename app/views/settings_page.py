@@ -46,6 +46,24 @@ class SettingsPage(QtWidgets.QWidget):
         pl = QtWidgets.QVBoxLayout(pref)
         pl.setSpacing(8)
         title = QtWidgets.QLabel(tr("settings.prefs", self._lang))
+        # Mouse sensitivity
+        self.slider_sens = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.slider_sens.setMinimum(50)
+        self.slider_sens.setMaximum(200)
+        self.slider_sens.setValue(100)
+        self.slider_sens.setTickInterval(10)
+        self.slider_sens.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        sens_row = QtWidgets.QHBoxLayout()
+        sens_row.addWidget(QtWidgets.QLabel(tr("settings.sens", self._lang)))
+        sens_row.addWidget(self.slider_sens)
+        pl.addLayout(sens_row)
+        # Difficulty preset
+        self.cb_diff = QtWidgets.QComboBox()
+        self.cb_diff.addItems(["Chill","Normal","Hard"])
+        diff_row = QtWidgets.QHBoxLayout()
+        diff_row.addWidget(QtWidgets.QLabel(tr("settings.diff", self._lang)))
+        diff_row.addWidget(self.cb_diff)
+        pl.addLayout(diff_row)
         title.setObjectName("nbCardTitle")
         pl.addWidget(title)
 
@@ -99,6 +117,8 @@ class SettingsPage(QtWidgets.QWidget):
             "music": self.chk_music.isChecked(),
             "theme": self.cb_theme.currentText(),
             "lang": self.cb_lang.currentText(),
+            "sensitivity": self.slider_sens.value()/100.0,
+            "difficulty": self.cb_diff.currentText(),
         }
         self.applyRequested.emit(data)
 
