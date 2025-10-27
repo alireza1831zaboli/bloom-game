@@ -1,0 +1,156 @@
+/* Base */
+* { font-family: Vazirmatn, Inter, Segoe UI, Arial; color: #eaf2ff; }
+QMainWindow, QWidget { background: #0f172a; }
+#nbMuted { color: #b6c8ff; }
+
+/* Titles */
+#nbTitle { font-size: 30px; font-weight: 900; letter-spacing: .4px; color: #eef3ff; }
+#nbSubtitle { font-size: 12.5px; color: #c5d3ff; }
+
+/* Header (Settings/About) */
+#nbHeader { font-size: 22px; font-weight: 800; color: #f0f6ff; }
+
+/* Back button */
+#nbBack {
+  background: rgba(208,224,255,0.14);
+  border: 1px solid rgba(208,224,255,0.40);
+  border-radius: 10px;
+  padding: 6px 12px;
+  color: #eaf2ff;
+}
+#nbBack:hover { background: rgba(208,224,255,0.22); }
+
+/* Menu Buttons */
+#nbMenuButton {
+  background: qlineargradient(x1:0,y1:0,x2:1,y2:1,
+    stop:0 rgba(255,255,255,0.16),
+    stop:1 rgba(255,255,255,0.10));
+  border: 1px solid rgba(200,220,255,0.38);
+  border-radius: 12px;
+  padding: 10px 18px;
+}
+#nbMenuButton:hover  { background: rgba(255,255,255,0.22); }
+#nbMenuButton:pressed{ background: rgba(255,255,255,0.28); }
+#nbMenuButton:disabled { color: #8aa0d6; border-color: rgba(200,220,255,0.22); }
+
+/* Chips */
+#nbChip {
+  background: rgba(208,224,255,0.14);
+  border: 1px solid rgba(208,224,255,0.40);
+  border-radius: 10px;
+  padding: 4px 10px;
+  color: #eaf2ff;
+}
+
+QLineEdit:focus, QComboBox:focus, QTextEdit:focus {
+  border: 1px solid #7cc4ff;
+  box-shadow: 0 0 0 2px rgba(124,196,255,0.30);
+}
+
+/* Cards */
+#nbCard {
+  border: 1px solid rgba(208,224,255,0.35);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: transparent;           /* قبلاً: rgba(...,0.10) -> حذف شد */
+}
+#nbCardTitle {
+  font-weight: 800;
+  color: #e8f0ff;
+  margin-bottom: 6px;
+}
+
+/* فرم‌ها و ورودی‌ها شفاف‌تر */
+QLineEdit, QComboBox, QTextEdit {
+  background: rgba(255,255,255,0.10);   /* کمی روشن‌تر از قبل */
+  border: 1px solid rgba(208,224,255,0.40);
+  border-radius: 10px; padding: 8px 10px; min-height: 30px; color: #ecf2ff;
+}
+
+/* Label عنوان سطر فرم راست‌چین */
+.nbFormLabel { color: #eaf2ff; font-weight: 700; padding: 4px 0 4px 8px; qproperty-alignment: 'AlignRight | AlignVCenter'; }
+
+.nbFormRow {
+  margin-bottom: 10px;
+}
+
+/* Status bar */
+QStatusBar { color: #c8d7ff; border-top: 1px solid rgba(208,224,255,0.38); }
+
+#nbQuickRetry {
+  background: rgba(208,224,255,0.20);
+  border: 1px solid rgba(208,224,255,0.45);
+  border-radius: 18px;
+  padding: 6px 10px;
+  font-weight: 800;
+}
+#nbQuickRetry:hover { background: rgba(208,224,255,0.30); }
+
+
+#nbHub {}
+#nbGameCard {
+  border: 1px solid rgba(208,224,255,0.40);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+}
+#nbGameCard:hover { background: rgba(255,255,255,0.06); }
+
+#nbGameIcon { font-size: 28px; color: rgba(230,240,255,0.85); }
+
+#nbPlayBtn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  background: rgba(124,196,255,0.18);
+  border: 1px solid rgba(124,196,255,0.45);
+  color: #eaf2ff;
+}
+#nbPlayBtn:hover { background: rgba(124,196,255,0.28); }
+
+/* Base cards & titles already exist, just ensuring */
+#nbCard { border: 1px solid rgba(208,224,255,0.35); border-radius: 14px; background: transparent; }
+#nbCardTitle { font-weight: 800; color:#e8f0ff; }
+#nbCardDesc { color: rgba(234,242,255,0.92); }
+
+/* پاک کردن بک‌گراند پیش‌فرض لیبل‌ها و تیترها */
+QLabel { background: transparent; }
+
+/* GroupBox شفاف و تمیز */
+QGroupBox#nbCard {
+  background: rgba(255,255,255,0.00);
+  border: 1px solid rgba(208,224,255,0.35);
+  border-radius: 14px;
+  margin-top: 14px;       /* فاصله عنوان */
+}
+QGroupBox#nbCard::title {
+  subcontrol-origin: margin;
+  subcontrol-position: top right;  /* در RTL درست می‌نشیند */
+  padding: 0px 10px;
+  color: rgba(234,242,255,0.95);
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+
+/* تیتر هدر صفحات (نوار بالای عنوان) */
+#nbTitle {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(208,224,255,0.30);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+/* توضیحات کارت در هاب */
+#nbCardDesc { background: transparent; }
+
+/* دکمه‌های پایین کارت‌ها */
+#nbPlayBtn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  background: rgba(124,196,255,0.18);
+  border: 1px solid rgba(124,196,255,0.45);
+  color: #eaf2ff;
+}
+#nbPlayBtn:hover { background: rgba(124,196,255,0.28); }
+
+

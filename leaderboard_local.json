@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Player",
+    "score": 1840,
+    "mode": "story-1"
+  },
+  {
+    "name": "Player",
+    "score": 1537,
+    "mode": "story-1-success"
+  },
+  {
+    "name": "Player",
+    "score": 595,
+    "mode": "endless"
+  },
+  {
+    "name": "Player",
+    "score": 581,
+    "mode": "phantom-endless"
+  },
+  {
+    "name": "Player",
+    "score": 451,
+    "mode": "phantom-endless"
+  },
+  {
+    "name": "Player",
+    "score": 377,
+    "mode": "endless"
+  },
+  {
+    "name": "Player",
+    "score": 330,
+    "mode": "endless"
+  },
+  {
+    "name": "Player",
+    "score": 330,
+    "mode": "endless"
+  },
+  {
+    "name": "Player",
+    "score": 304,
+    "mode": "weave-endless"
+  },
+  {
+    "name": "Player",
+    "score": 244,
+    "mode": "weave-endless"
+  }
+]
